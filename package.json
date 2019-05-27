@@ -1,6 +1,6 @@
 {
   "name": "yieldable-json",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "description": "An asynchronous yieldable version of JSON.stringify and JSON.parse",
   "author": "Gireesh Punathil <gpunathi@in.ibm.com>",
@@ -9,7 +9,8 @@
     "Lakshmi Swetha Gopireddy <lakshmiswethagopireddy@gmail.com>",
     "Michael Dawson <michael_dawson@ca.ibm.com>",
     "Sam Roberts <vieuxtech@gmail.com>",
-    "Sreepurna Jasti <sreepurna.jasti@gmail.com>"
+    "Sreepurna Jasti <sreepurna.jasti@gmail.com>",
+    "Marc Beaupré <hrdwdmrbl@gmail.com"
   ],
   "keywords": [
     "stringify",
@@ -23,14 +24,14 @@
     "json",
     "non-blocking"
   ],
-  "license": "Apache-2.0",
-  "repository": "ibmruntimes/yieldable-json",
+  "license": "UNLICENSED",
+  "repository": "LYNX/yieldable-json",
   "scripts": {
     "lint": "eslint .",
     "test": "tap test/*.js"
   },
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 10.0.0"
   },
   "files": [
     "LICENSE",
@@ -42,8 +43,15 @@
     "test/"
   ],
   "devDependencies": {
+<<<<<<< Updated upstream
     "eslint": "^3.19.0",
     "eslint-config-strongloop": "^2.1.0",
+=======
+    "@adsk/eslint-config-lynx": "^2.0.1",
+    "blocked-at": "^1.1.3",
+    "eslint": "^3.19.0",
+    "seedrandom": "^2.4.3",
+>>>>>>> Stashed changes
     "tap": "^10.7.3"
   },
   "dependencies": {

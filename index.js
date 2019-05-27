@@ -22,7 +22,7 @@ const ps = require('./yieldable-stringify');
  * @param { string or number } space
  * @return { string or number }
  */
-let validateSpace = (space) => {
+const validateSpace = (space) => {
   if (typeof space === 'number') {
     space = Math.round(space);
     if (space >= 1 && space <= 10)
@@ -39,80 +39,44 @@ let validateSpace = (space) => {
   }
 };
 
-/**
- * Checks whether the provided intensity
- * @param { number } intensity
- * @return { number }
- */
-let validateIntensity = (intensity) => {
-  intensity = Math.round(intensity);
-  if (intensity > 0 && intensity <= 32)
-    return intensity;
-  else if (intensity <= 0)
-    return 1;
-  else
-    return 32;
-};
-
 module.exports = {
 
   /**
   * Error checking  and call of appropriate functions for JSON parse
-  * @param { primitive data types } data
-  * @param { function or array } reviver
-  * @param { number } intensity
-  * @param { function } callback
-  * @return { function } parseWrapper
+  * @param { string } data
+  * @param {Object|undefined} options
+  * @param { function|array } options.reviver
+  * @param { number } options.maxDuration Time allowed to pass before yielding (in milliseconds)
+  * @return {Promise}
   */
-  parseAsync(data, reviver, intensity, callback) {
-    const argv = arguments;
-    if (argv.length < 2)
-      throw new Error('Missing Callback');
-
-    if (typeof argv[argv.length - 1] === 'function') {
-      callback = argv[argv.length - 1];
-      reviver = null;
-      intensity = 1;
-    } else
-      throw new TypeError('Callback is not a function');
-
-    if (argv.length > 2) {
-      let i = 1;
-      if (typeof argv[i] === 'function')
-        reviver = argv[i++];
-      if (typeof argv[i] === 'number')
-        intensity = validateIntensity(argv[i]);
-    }
-    return pa.parseWrapper(data, reviver, intensity, callback);
+  parseAsync(data, options = {}) {
+    _.defaults(options, {
+      reviver: undefined,
+      maxDuration: 15
+    });
+    return pa.parseWrapper(data, options);
   },
 
   /**
   * Error checking  and call of appropriate functions for JSON stringify API
-  * @param { primitive data types } data
-  * @param { function or array } replacer
-  * @param { number or string } space
-  * @param { number } intensity
-  * @param { function } callback
-  * @return { function } stringifyWrapper
+  * @param { * } data
+  * @param {Object|undefined} options
+  * @param { function|Array } options.replacer
+  * @param { number|string } options.space
+  * @param { number } options.maxDuration Time allowed to pass before yielding (in milliseconds)
+  * @return {Promise}
   */
-  stringifyAsync(data, replacer, space, intensity, callback) {
-    const argv = arguments;
-    if (typeof argv[argv.length - 1] === 'function') {
-      callback = argv[argv.length - 1];
-      replacer = null;
-      intensity = 1;
-    } else
-      throw new TypeError('Callback is not a function');
-    if (argv.length > 2) {
-      let i = 1;
-      if (typeof argv[i] === 'function' || typeof argv[i] === 'object')
-        replacer = argv[i++];
-      if ((typeof argv[i] === 'number' || typeof argv[i] === 'string') &&
-           typeof argv[i++] === 'number')
-        space = validateSpace(argv[i++]);
-      if (typeof argv[i] === 'number')
-        intensity = validateIntensity(argv[i]);
+  stringifyAsync(data, options = {}) {
+    if (options.space) {
+      options.space = validateSpace(options.space);
     }
-    return ps.stringifyWrapper(data, replacer, space, intensity, callback);
+
+    _.defaults(options, {
+      maxDuration: 15, // ms
+      replacer: undefined,
+      space: undefined
+    });
+
+    return ps.stringifyWrapper(data, options);
   },
 };

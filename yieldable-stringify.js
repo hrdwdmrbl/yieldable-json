@@ -14,14 +14,14 @@
  ***************************************************************************/
 'use strict';
 
-let counter = 0;
-let objStack = [];
-let flag = 0;
-let flag1 = 0;
-let temp = '';
-let returnStr = '';
-let subStr = '';
-let len = 0;
+const counter = 0;
+const objStack = [];
+const flag = 0;
+const flag1 = 0;
+const temp = '';
+const returnStr = '';
+const subStr = '';
+const len = 0;
 const limit = 100000;
 
 function StringifyError(m) {
@@ -35,14 +35,14 @@ function StringifyError(m) {
  * @return { string }
  */
 
-let normalize = (string, flagN) => {
-  let retStr = '';
-  let transform = '';
-  let uc =
+const normalize = (string, flagN) => {
+  const retStr = '';
+  const transform = '';
+  const uc =
   '/[\\\'\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4' +
   '\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g';
-  let unicode = new RegExp(uc);
-  let escape = {
+  const unicode = new RegExp(uc);
+  const escape = {
     '\b': '\\b',
     '\t': '\\t',
     '\n': '\\n',
@@ -55,7 +55,7 @@ let normalize = (string, flagN) => {
   if (unicode.test(string)) {
     // Unicode logic here
     transform = string.replace(unicode, (a) => {
-      let c = escape[a];
+      const c = escape[a];
       if (typeof c === 'string')
         return c;
       else
@@ -97,13 +97,13 @@ let normalize = (string, flagN) => {
  */
 
 function * stringifyYield(field, container, replacer, space, intensity) {
-  let itr = 0;
-  let key = '';
-  let val = '';
-  let length = 0;
-  let tempVal = '';
-  let result = '';
-  let value = container[field];
+  const itr = 0;
+  const key = '';
+  const val = '';
+  const length = 0;
+  const tempVal = '';
+  const result = '';
+  const value = container[field];
 
   // Yield the stringification at definite intervals
   if (++counter > 512 * intensity) {
@@ -119,7 +119,7 @@ function * stringifyYield(field, container, replacer, space, intensity) {
   switch (typeof value) {
     case 'string':
       if (value.length > limit) {
-        for (let l = 0; l < value.length; l += limit) {
+        for (const l = 0; l < value.length; l += limit) {
           flag1 = 0;
           yield value;
           subStr = value.substr(l, limit);
@@ -145,7 +145,7 @@ function * stringifyYield(field, container, replacer, space, intensity) {
         return 'null';
 
     // Manage special cases of Arrays and Objects
-      let getResult = (decision) => {
+      const getResult = (decision) => {
         if (result.length === 0)
           if (decision)
             return '{}';
@@ -243,25 +243,25 @@ function * stringifyYield(field, container, replacer, space, intensity) {
  * @return { function } yieldCPU
  */
 
-let stringifyWrapper = (value, replacer, space, intensity, callback) => {
-  let indent = '';
+const stringifyWrapper = (value, options) => {
+  const indent = '';
   if (typeof space === 'number') {
     indent = ' '.repeat(space);
   } else if (typeof space === 'string') {
     indent = space;
   }
 
-  let yielding;
+  const yielding;
 
   // To hold 'stringifyYield' genarator function
   function * yieldBridge() {
     yielding = yield *stringifyYield('', {'': value}, replacer, indent, 1);
   }
 
-  let rs = yieldBridge();
-  let g = rs.next();
+  const rs = yieldBridge();
+  const g = rs.next();
 
-  let yieldCPU = () => {
+  const yieldCPU = () => {
     setImmediate(() => {
       g = rs.next();
       if (g && g.done === true) {
